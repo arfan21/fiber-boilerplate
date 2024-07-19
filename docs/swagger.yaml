@@ -67,9 +67,7 @@ definitions:
         example: 200
         type: integer
       data: {}
-      errors:
-        items: {}
-        type: array
+      errors: {}
       message:
         example: Success
         type: string
@@ -82,12 +80,12 @@ info:
   contact:
     name: API Support
     url: http://www.synapsis.id
-  description: This is a sample server cell for Fiber Boilerplate API.
+  description: This is a sample server cell for fiber-boilerplate.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Fiber Boilerplate API
+  title: fiber-boilerplate
   version: "1.0"
 paths:
   /api/v1/users/login:

@@ -10,7 +10,7 @@ type HTTPResponse struct {
 	Status  string `json:"status" example:"OK"`
 	Message string `json:"message,omitempty" example:"Success"`
 	Data    any    `json:"data,omitempty" `
-	Errors  []any  `json:"errors,omitempty" `
+	Errors  any    `json:"errors,omitempty" `
 }
 
 func (h HTTPResponse) MarshalJSON() ([]byte, error) {

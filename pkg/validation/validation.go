@@ -1,7 +1,6 @@
 package validation
 
 import (
-	"encoding/json"
 	"reflect"
 	"strings"
 	"sync"
@@ -11,6 +10,7 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	en_translations "github.com/go-playground/validator/v10/translations/en"
+	"github.com/gofiber/fiber/v2"
 )
 
 var (
@@ -49,22 +49,18 @@ func Validate[T any](modelValidate T) error {
 
 	err := validate.Struct(modelValidate)
 	if err != nil {
-		var messages []map[string]interface{}
+		var messages constant.ErrsWithCode
 
 		for _, err := range err.(validator.ValidationErrors) {
-			fieldName := err.Field()
 
-			messages = append(messages, map[string]interface{}{
-				"field":   fieldName,
-				"message": err.Translate(translator),
+			messages = append(messages, constant.ErrWithCode{
+				HTTPStatusCode: fiber.StatusBadRequest,
+				Message:        err.Translate(translator),
+				Field:          err.Field(),
 			})
 		}
-		jsonMessage, errJson := json.Marshal(messages)
-		if errJson != nil {
-			return errJson
-		}
 
-		return &constant.ErrValidation{Message: string(jsonMessage)}
+		return messages
 	}
 
 	return nil

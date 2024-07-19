@@ -1,13 +1,12 @@
 package migration
 
 import (
+	"context"
 	"database/sql"
 	"embed"
 	"errors"
 
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	"github.com/golang-migrate/migrate/v4/source/iofs"
+	"github.com/pressly/goose/v3"
 )
 
 //go:embed *.sql
@@ -15,7 +14,6 @@ var embedMigrations embed.FS
 
 type Migration struct {
 	db *sql.DB
-	*migrate.Migrate
 }
 
 func New(db *sql.DB) (*Migration, error) {
@@ -23,20 +21,19 @@ func New(db *sql.DB) (*Migration, error) {
 		return &Migration{}, errors.New("db is nil")
 	}
 
-	source, err := iofs.New(embedMigrations, ".")
-	if err != nil {
+	goose.SetBaseFS(embedMigrations)
+
+	if err := goose.SetDialect("postgres"); err != nil {
 		return &Migration{}, err
 	}
 
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	if err != nil {
-		return &Migration{}, err
-	}
+	return &Migration{db: db}, nil
+}
 
-	migrator, err := migrate.NewWithInstance("iofs", source, "postgres", driver)
-	if err != nil {
-		return &Migration{}, err
-	}
+func (m *Migration) Up(ctx context.Context) error {
+	return goose.UpContext(ctx, m.db, ".")
+}
 
-	return &Migration{db: db, Migrate: migrator}, nil
+func (m *Migration) Down(ctx context.Context) error {
+	return goose.ResetContext(ctx, m.db, ".")
 }

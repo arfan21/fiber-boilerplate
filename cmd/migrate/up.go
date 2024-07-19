@@ -15,7 +15,7 @@ func Up() *cli.Command {
 				return err
 			}
 
-			if err := migrations.Up(); err != nil {
+			if err := migrations.Up(c.Context); err != nil {
 				return err
 			}
 

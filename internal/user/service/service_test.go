@@ -107,7 +107,7 @@ func TestRegister(t *testing.T) {
 
 		assert.Error(t, err)
 
-		var validationErr *constant.ErrValidation
+		var validationErr constant.ErrsWithCode
 		assert.ErrorAs(t, err, &validationErr)
 	})
 }

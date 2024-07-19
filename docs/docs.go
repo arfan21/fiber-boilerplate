@@ -399,10 +399,7 @@ const docTemplate = `{
                     "example": 200
                 },
                 "data": {},
-                "errors": {
-                    "type": "array",
-                    "items": {}
-                },
+                "errors": {},
                 "message": {
                     "type": "string",
                     "example": "Success"
@@ -422,8 +419,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Fiber Boilerplate API",
-	Description:      "This is a sample server cell for Fiber Boilerplate API.",
+	Title:            "fiber-boilerplate",
+	Description:      "This is a sample server cell for fiber-boilerplate.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

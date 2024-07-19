@@ -3,7 +3,6 @@ package userctrl
 import (
 	"github.com/arfan21/fiber-boilerplate/internal/model"
 	"github.com/arfan21/fiber-boilerplate/internal/user"
-	"github.com/arfan21/fiber-boilerplate/pkg/exception"
 	"github.com/arfan21/fiber-boilerplate/pkg/pkgutil"
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,10 +28,14 @@ func New(svc user.Service) *ControllerHTTP {
 func (ctrl ControllerHTTP) Register(c *fiber.Ctx) error {
 	var req model.UserRegisterRequest
 	err := c.BodyParser(&req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	err = ctrl.svc.Register(c.UserContext(), req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	return c.Status(fiber.StatusCreated).JSON(pkgutil.HTTPResponse{
 		Code: fiber.StatusCreated,
@@ -52,10 +55,14 @@ func (ctrl ControllerHTTP) Register(c *fiber.Ctx) error {
 func (ctrl ControllerHTTP) Login(c *fiber.Ctx) error {
 	var req model.UserLoginRequest
 	err := c.BodyParser(&req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	res, err := ctrl.svc.Login(c.UserContext(), req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	return c.Status(fiber.StatusOK).JSON(pkgutil.HTTPResponse{
 		Code: fiber.StatusOK,
@@ -76,10 +83,14 @@ func (ctrl ControllerHTTP) Login(c *fiber.Ctx) error {
 func (ctrl ControllerHTTP) RefreshToken(c *fiber.Ctx) error {
 	var req model.UserRefreshTokenRequest
 	err := c.BodyParser(&req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	res, err := ctrl.svc.RefreshToken(c.UserContext(), req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	return c.Status(fiber.StatusOK).JSON(pkgutil.HTTPResponse{
 		Code: fiber.StatusOK,
@@ -101,10 +112,14 @@ func (ctrl ControllerHTTP) RefreshToken(c *fiber.Ctx) error {
 func (ctrl ControllerHTTP) Logout(c *fiber.Ctx) error {
 	var req model.UserLogoutRequest
 	err := c.BodyParser(&req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	err = ctrl.svc.Logout(c.UserContext(), req)
-	exception.PanicIfNeeded(err)
+	if err != nil {
+		return err
+	}
 
 	return c.Status(fiber.StatusOK).JSON(pkgutil.HTTPResponse{
 		Code: fiber.StatusOK,

@@ -15,7 +15,7 @@ func Down() *cli.Command {
 				return err
 			}
 
-			if err := migrations.Down(); err != nil {
+			if err := migrations.Down(c.Context); err != nil {
 				return err
 			}
 

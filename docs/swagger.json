@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server cell for Fiber Boilerplate API.",
-        "title": "Fiber Boilerplate API",
+        "description": "This is a sample server cell for fiber-boilerplate.",
+        "title": "fiber-boilerplate",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
@@ -393,10 +393,7 @@
                     "example": 200
                 },
                 "data": {},
-                "errors": {
-                    "type": "array",
-                    "items": {}
-                },
+                "errors": {},
                 "message": {
                     "type": "string",
                     "example": "Success"

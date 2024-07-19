@@ -32,7 +32,6 @@ func Root() *cli.Command {
 		Subcommands: []*cli.Command{
 			Up(),
 			Down(),
-			Fresh(),
 		},
 	}
 }
