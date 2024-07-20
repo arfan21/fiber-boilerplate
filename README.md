@@ -2,12 +2,12 @@
 
 ### Database Schema
 
-![Database Schema](https://github.com/arfan21/synapsis_id/assets/48755707/e51accc5-79aa-4f7b-9a2a-66999d18b7d8)
+![Database Schema]()
 
 ### API Specification
 
--   Swagger Docs: [Link](https://synapsis-id.fly.dev/swagger/index.html)
--   Postman Docs: [Link](https://documenter.getpostman.com/view/10131591/2sA2r545j6)
+-   Swagger Docs: [Link]()
+-   Postman Docs: [Link]()
 
 ### Prerequisites
 
