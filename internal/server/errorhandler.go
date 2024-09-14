@@ -20,6 +20,7 @@ func ErrorHandler(ctx *fiber.Ctx, err error) error {
 		logger.Log(ctx.UserContext()).Error().Msg(err.Error())
 	}()
 	var arrWithCodeErr constant.ErrsWithCode
+	errors.As(err, &arrWithCodeErr)
 
 	var withCodeErr constant.ErrWithCode
 	if errors.As(err, &withCodeErr) {
