@@ -46,5 +46,5 @@ func Set[T any](ctx context.Context, conn *redis.Client, key string, value T, ex
 		return err
 	}
 
-	return conn.Set(ctx, key, string(val), 0).Err()
+	return conn.Set(ctx, key, string(val), expiration).Err()
 }

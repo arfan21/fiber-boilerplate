@@ -5,9 +5,8 @@ import (
 	"os"
 	"sync"
 
-	"github.com/agoda-com/opentelemetry-go/otelzerolog"
-	otel "github.com/agoda-com/opentelemetry-logs-go"
 	"github.com/arfan21/fiber-boilerplate/config"
+	"github.com/arfan21/otelzerolog"
 	"github.com/rs/zerolog"
 )
 
@@ -24,27 +23,11 @@ func Log(ctx context.Context) *zerolog.Logger {
 		}
 
 		if config.Get().Otel.Enabled {
-			loggerInstance = loggerInstance.Hook(NewHook())
+			loggerInstance = loggerInstance.Hook(otelzerolog.NewHook(config.Get().Service.Name))
 		}
 
 	})
 
 	newlogger := loggerInstance.With().Ctx(ctx).Logger()
 	return &newlogger
-}
-
-var otelZerologHook otelzerolog.Hook
-var onceHook sync.Once
-
-func NewHook() otelzerolog.Hook {
-	onceHook.Do(func() {
-		logger := otel.GetLoggerProvider().Logger(
-			config.Get().Service.Name,
-		)
-
-		otelZerologHook = otelzerolog.Hook{Logger: logger}
-
-	})
-
-	return otelZerologHook
 }
