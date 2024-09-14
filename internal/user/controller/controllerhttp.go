@@ -2,16 +2,16 @@ package userctrl
 
 import (
 	"github.com/arfan21/fiber-boilerplate/internal/model"
-	"github.com/arfan21/fiber-boilerplate/internal/user"
+	usersvc "github.com/arfan21/fiber-boilerplate/internal/user/service"
 	"github.com/arfan21/fiber-boilerplate/pkg/pkgutil"
 	"github.com/gofiber/fiber/v2"
 )
 
 type ControllerHTTP struct {
-	svc user.Service
+	svc *usersvc.Service
 }
 
-func New(svc user.Service) *ControllerHTTP {
+func New(svc *usersvc.Service) *ControllerHTTP {
 	return &ControllerHTTP{svc: svc}
 }
 

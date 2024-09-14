@@ -9,7 +9,6 @@ import (
 	"github.com/arfan21/fiber-boilerplate/config"
 	"github.com/arfan21/fiber-boilerplate/internal/entity"
 	"github.com/arfan21/fiber-boilerplate/internal/model"
-	"github.com/arfan21/fiber-boilerplate/internal/user"
 	userrepo "github.com/arfan21/fiber-boilerplate/internal/user/repository"
 	"github.com/arfan21/fiber-boilerplate/pkg/constant"
 	"github.com/go-redis/redismock/v9"
@@ -25,9 +24,9 @@ var (
 	pgxMock     pgxmock.PgxPoolIface
 	redisClient *redis.Client
 	redisMock   redismock.ClientMock
-	repoPG      user.Repository
-	repoRedis   user.RepositoryRedis
-	servcie     user.Service
+	repoPG      *userrepo.Repository
+	repoRedis   *userrepo.RepositoryRedis
+	service     *Service
 
 	defaultPassword       = "test123qwe"
 	defaultHashedPassword = "$2a$10$RKU1hsAXRPXvf2tPXdyGnuzfM.gikV04zp.D7cwWG0dwEGD519B9m"
@@ -55,8 +54,8 @@ func initDep(t *testing.T) {
 		repoRedis = userrepo.NewRedis(redisClient)
 	}
 
-	if servcie == nil {
-		servcie = New(repoPG, repoRedis)
+	if service == nil {
+		service = New(repoPG, repoRedis)
 	}
 }
 
@@ -74,7 +73,7 @@ func TestRegister(t *testing.T) {
 			WithArgs(req.Fullname, req.Email, pgxmock.AnyArg()).
 			WillReturnResult(pgxmock.NewResult("INSERT", 1))
 
-		err := servcie.Register(context.Background(), req)
+		err := service.Register(context.Background(), req)
 
 		assert.NoError(t, err)
 	})
@@ -90,7 +89,7 @@ func TestRegister(t *testing.T) {
 			WithArgs(req.Fullname, req.Email, pgxmock.AnyArg()).
 			WillReturnError(&pgconn.PgError{Code: "23505"}) // unique violation
 
-		err := servcie.Register(context.Background(), req)
+		err := service.Register(context.Background(), req)
 
 		assert.Error(t, err)
 		assert.ErrorIs(t, err, constant.ErrEmailAlreadyRegistered)
@@ -103,7 +102,7 @@ func TestRegister(t *testing.T) {
 			Password: "test",
 		}
 
-		err := servcie.Register(context.Background(), req)
+		err := service.Register(context.Background(), req)
 
 		assert.Error(t, err)
 
@@ -142,7 +141,7 @@ func TestLogin(t *testing.T) {
 
 		redisMock.Regexp().ExpectSet(constant.RedisRefreshTokenKeyPrefix+"asd", string(redisPayloadJson), 0).SetVal("OK")
 
-		res, err := servcie.Login(context.Background(), req)
+		res, err := service.Login(context.Background(), req)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, res)
 
@@ -160,7 +159,7 @@ func TestLogin(t *testing.T) {
 			WithArgs(req.Email).
 			WillReturnError(pgx.ErrNoRows)
 
-		_, err := servcie.Login(context.Background(), req)
+		_, err := service.Login(context.Background(), req)
 		assert.Error(t, err)
 		assert.ErrorIs(t, err, constant.ErrEmailOrPasswordInvalid)
 	})
@@ -187,7 +186,7 @@ func TestRefreshToken(t *testing.T) {
 
 		redisMock.Regexp().ExpectGet(constant.RedisRefreshTokenKeyPrefix + req.RefreshToken).SetVal(string(redisPayloadJson))
 
-		res, err := servcie.RefreshToken(context.Background(), req)
+		res, err := service.RefreshToken(context.Background(), req)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, res)
 	})

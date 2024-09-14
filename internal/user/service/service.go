@@ -9,7 +9,7 @@ import (
 	"github.com/arfan21/fiber-boilerplate/config"
 	"github.com/arfan21/fiber-boilerplate/internal/entity"
 	"github.com/arfan21/fiber-boilerplate/internal/model"
-	"github.com/arfan21/fiber-boilerplate/internal/user"
+	userrepo "github.com/arfan21/fiber-boilerplate/internal/user/repository"
 	"github.com/arfan21/fiber-boilerplate/pkg/constant"
 	"github.com/arfan21/fiber-boilerplate/pkg/validation"
 	"github.com/golang-jwt/jwt/v5"
@@ -17,11 +17,11 @@ import (
 )
 
 type Service struct {
-	repo      user.Repository
-	repoRedis user.RepositoryRedis
+	repo      *userrepo.Repository
+	repoRedis *userrepo.RepositoryRedis
 }
 
-func New(repo user.Repository, repoRedis user.RepositoryRedis) *Service {
+func New(repo *userrepo.Repository, repoRedis *userrepo.RepositoryRedis) *Service {
 	return &Service{repo: repo, repoRedis: repoRedis}
 }
 
