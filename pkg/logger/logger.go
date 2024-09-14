@@ -28,6 +28,6 @@ func Log(ctx context.Context) *zerolog.Logger {
 
 	})
 
-	newlogger := loggerInstance.With().Ctx(ctx).Logger()
+	newlogger := loggerInstance.With().Caller().Ctx(ctx).Logger()
 	return &newlogger
 }
